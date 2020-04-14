@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttergooglesigninapp/ui/splash_screen.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
-import 'dashboard.dart';
-import 'login.dart';
 
 void main() => runApp(MyApp());
 
@@ -22,17 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home:   StreamBuilder(
-          stream: auth.onAuthStateChanged,
-          builder: (BuildContext context, AsyncSnapshot<FirebaseUser> snapshot) {
-            if (snapshot.hasData) {
-              print("auth state ${snapshot.data}");
-              return DashBoardView(title: "Google SignIn",auth: auth,googleSignIn: googleSignIn,user: snapshot.data,);
-            } else {
-              print("auth state $snapshot");
-              return MyHomePage(title: "Google SignIn",auth: auth,googleSignIn: googleSignIn,user: user,);
-            }
-          }),
+      home: SplashScreen(),
     );
   }
 }
