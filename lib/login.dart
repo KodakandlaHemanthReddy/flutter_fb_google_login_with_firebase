@@ -1,21 +1,30 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:fluttergooglesigninapp/dashboard.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key key,this.auth,this.user,this.googleSignIn, this.title}) : super(key: key);
 
   final String title;
+  FirebaseAuth auth;
+  FirebaseUser user;
+  GoogleSignIn googleSignIn;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  FirebaseAuth _auth = FirebaseAuth.instance;
-  FirebaseUser _user;
-  GoogleSignIn _googleSignIn = new GoogleSignIn();
+
+  TextEditingController _emailController = new TextEditingController();
+  TextEditingController _passwordController = new TextEditingController();
+  bool isTapped = false;
+  bool isSignedUp = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,28 +32,87 @@ class _MyHomePageState extends State<MyHomePage> {
         centerTitle: true,
         title: Text(widget.title),
       ),
-      body: isSignIn ? Center(
+      body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            CircleAvatar(
-              backgroundImage: NetworkImage(_user.photoUrl),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 8.0,vertical: 8.0),
+              child: TextFormField(
+                controller: _emailController,
+                decoration: new InputDecoration(
+                    focusColor: const Color(0xffff6771),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(5.0)),
+                        borderSide: BorderSide(
+                            style: BorderStyle.none,
+                            width: 0.0)),
+                    contentPadding: EdgeInsets.only(
+                        top: 13.0, bottom: 13.0, left: 10.0),
+                    filled: true,
+                    fillColor: Colors.grey[300],
+                    hintText: 'Your Email',
+                    hintStyle: TextStyle(fontSize: 12.0)),
+                keyboardType: TextInputType.text,
+
+              ),
             ),
-            Text(_user.displayName),
-            Text(_user.email),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 8.0),
+              child: TextFormField(
+                controller: _passwordController,
+                decoration: new InputDecoration(
+                    focusColor: const Color(0xffff6771),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(5.0)),
+                        borderSide: BorderSide(
+                            style: BorderStyle.none,
+                            width: 0.0)),
+                    contentPadding: EdgeInsets.only(
+                        top: 13.0, bottom: 13.0, left: 10.0),
+                    filled: true,
+                    fillColor: Colors.grey[300],
+                    hintText: 'Password',
+                    suffixIcon: GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          isTapped = !isTapped;
+                        });
+                      },
+                      child: isTapped ? Icon(Icons.visibility_off) : Icon(Icons.visibility),
+                    ),
+                    hintStyle: TextStyle(fontSize: 12.0)),
+                keyboardType: TextInputType.text,
+                obscureText: !isTapped,
+              ),
+            ),
             RaisedButton(
               onPressed: () {
-                googleSignout();
-                _logOut();
+                signUpWithEmail(_emailController.text, _passwordController.text);
               },
-              child: new Text("Sign Out"),
+              child: new Text("Sign Up" ),
               color: Colors.green,
             ),
-          ],
-        ),
-      ) : Center(
-        child: Column(
-          children: <Widget>[
+            RaisedButton(
+              onPressed: () {
+                signInWithEmail(_emailController.text, _passwordController.text);
+              },
+              child: new Text("Sign In" ),
+              color: Colors.green,
+            ),
+            RaisedButton(
+              onPressed: () {
+                sendSignInWithEmailLink(_emailController.text);
+              },
+              child: new Text("Sign In with link" ),
+              color: Colors.green,
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+              alignment: Alignment.center,
+              child: Text("OR"),
+            ),
             RaisedButton(
               onPressed: () {
                 handleSignIn();
@@ -58,7 +126,8 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               child: new Text("Sign In with FaceBook"),
               color: Colors.green,
-            )
+            ),
+
           ],
         ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
@@ -69,40 +138,23 @@ bool isSignIn = false;
   Future<void> handleSignIn() async
   {
     print("entered login");
-    GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
+    GoogleSignInAccount googleSignInAccount = await widget.googleSignIn.signIn();
     print("sign in");
     GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
     print("Success print");
     AuthCredential credential = GoogleAuthProvider.getCredential(idToken: googleSignInAuthentication.idToken,
         accessToken: googleSignInAuthentication.accessToken);
     print("signed in");
-    AuthResult result = (await _auth.signInWithCredential(credential));
+    AuthResult result = (await widget.auth.signInWithCredential(credential));
     print("login");
-    _user = result.user;
-    setState(() {
-      isSignIn = true;
-    });
   }
 
-  Future<void> googleSignout() async{
-    await _auth.signOut().then((onValue){
-      _googleSignIn.signOut();
-      setState(() {
-        isSignIn = false;
-      });
-    });
-  }
-  void _logOut() async {
-    await _auth.signOut().then((response) {
-      isSignIn = false;
-      setState(() {});
-    });
-  }
+
 
   void _logIn() {
     _loginWithFacebook().then((response) {
       if (response != null) {
-        _user = response;
+        widget.user = response;
         isSignIn = true;
         setState(() {});
       }
@@ -138,4 +190,35 @@ bool isSignIn = false;
     return facebookLoginResult;
   }
 
+  Future<FirebaseUser> signInWithEmail(String email, String password) async {
+    var user = await widget.auth.signInWithEmailAndPassword(email: email, password: password);
+    setState(() {
+//      isSignedUp = true;
+      isSignIn = true;
+    });
+    print("email auth ${user.user.photoUrl}");
+    return user.user;
+  }
+
+  Future<FirebaseUser> signUpWithEmail(String email, String password) async {
+    var user = await widget.auth.createUserWithEmailAndPassword(email: email, password: password);
+    setState(() {
+//      isSignIn = true;
+      isSignedUp = true;
+    });
+    print("signup email auth ${user.user.toString()}");
+    return user.user;
+  }
+
+  Future<void> sendSignInWithEmailLink(String email) async {
+    print("email sign in link");
+    return widget.auth.sendSignInWithEmailLink(
+        email: email,
+        url: "https://fluttergooglesigninapp.page.link",
+        handleCodeInApp: true,
+        iOSBundleID: 'com.firebasebootcamp.fluttergooglesigninapp',
+        androidPackageName: 'com.firebasebootcamp.fluttergooglesigninapp',
+        androidInstallIfNotAvailable: true,
+        androidMinimumVersion: "21");
+  }
 }
