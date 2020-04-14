@@ -90,16 +90,16 @@ class _LoginViewState extends State<LoginView> {
             ),
             RaisedButton(
               onPressed: () {
-                _loginBloc.signInWithEmail(_loginBloc.emailController.text, _loginBloc.passwordController.text);
+                _loginBloc.signUpWithEmail(_loginBloc.emailController.text, _loginBloc.passwordController.text,context);
               },
-              child: new Text("Sign In" ),
+              child: new Text("Sign Up" ),
               color: Colors.green,
             ),
             RaisedButton(
               onPressed: () {
-                _loginBloc.sendEmailLink(_loginBloc.emailController.text);
+                _loginBloc.signInWithEmail(_loginBloc.emailController.text, _loginBloc.passwordController.text,context);
               },
-              child: new Text("Sign In with link" ),
+              child: new Text("Sign In" ),
               color: Colors.green,
             ),
             Container(
@@ -109,7 +109,7 @@ class _LoginViewState extends State<LoginView> {
             ),
             RaisedButton(
               onPressed: () {
-                _loginBloc.handleSignIn();
+                _loginBloc.handleSignIn(context);
               },
               child: new Text("Sign In with Google"),
               color: Colors.green,

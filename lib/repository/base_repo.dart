@@ -8,10 +8,11 @@ abstract class BaseRepository{
   FirebaseAuth get fireBaseAuth;
   GoogleSignIn get googleSignIn;
   FirebaseUser get loggedInUser;
-  void signInWithEmail(String email,String password);
-  void handleSignIn();
-  void signUpWithEmail(String email,String password);
+  void signInWithEmail(String email,String password,BuildContext context);
+  void handleSignIn(BuildContext context);
+  void signUpWithEmail(String email,String password,BuildContext context);
   void sendSignInWithEmailLink(String email);
   routeHandler(BuildContext context);
-  void signOut();
+  void signOut(BuildContext context);
+  void userData();
 }

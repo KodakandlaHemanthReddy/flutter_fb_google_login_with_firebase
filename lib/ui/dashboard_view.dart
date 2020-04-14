@@ -35,21 +35,23 @@ class _DashBoardViewState extends State<DashBoardView> {
         title: Text("DashBoard"),
       ),
       body: Container(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
+        child: Center(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
         CircleAvatar(
-        backgroundImage: NetworkImage(_dashBoardBloc.signedInUser.photoUrl==null ? "https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png" : _dashBoardBloc.signedInUser.photoUrl ),
+        backgroundImage: NetworkImage(_dashBoardBloc.loggedUser.photoUrl == null ? "https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png" : _dashBoardBloc.loggedUser.photoUrl ),
       ),
-        Text(_dashBoardBloc.signedInUser.displayName == null ? "": _dashBoardBloc.signedInUser.displayName),
-        Text(_dashBoardBloc.signedInUser.email),
-        RaisedButton(
-          onPressed: () {
-            _dashBoardBloc.signOut();
-          },
-          child: new Text("Sign Out"),
-          color: Colors.green,
-        ),]
+        Text(_dashBoardBloc.loggedUser.displayName == null ? "": _dashBoardBloc.loggedUser.displayName),
+        Text(_dashBoardBloc.loggedUser.email),
+          RaisedButton(
+            onPressed: () {
+              _dashBoardBloc.signOut(context);
+            },
+            child: new Text("Sign Out"),
+            color: Colors.green,
+          ),]
+          ),
         ),
       ),
     );

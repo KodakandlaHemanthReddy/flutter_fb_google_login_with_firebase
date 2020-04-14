@@ -23,20 +23,20 @@ class LoginBloc implements BaseBloc{
     // TODO: implement dispose
   }
 
-  signInWithEmail(String email,String password){
-    _baseRepository.signInWithEmail(email,password);
+  signInWithEmail(String email,String password,BuildContext context){
+    _baseRepository.signInWithEmail(email,password,context);
   }
 
-  signUpWithEmail(String email,String password){
-    _baseRepository.signUpWithEmail(email, password);
+  signUpWithEmail(String email,String password,BuildContext context){
+    _baseRepository.signUpWithEmail(email, password,context);
   }
 
   sendEmailLink(String email){
     _baseRepository.sendSignInWithEmailLink(email);
   }
 
-  handleSignIn(){
-    _baseRepository.handleSignIn();
+  handleSignIn(BuildContext context){
+    _baseRepository.handleSignIn(context);
   }
 
 }
