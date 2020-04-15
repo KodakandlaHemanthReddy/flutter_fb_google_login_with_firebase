@@ -1,4 +1,6 @@
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:fluttergooglesigninapp/bloc/dashboard_bloc.dart';
 
@@ -18,6 +20,11 @@ class _DashBoardViewState extends State<DashBoardView> {
     super.initState();
     _dashBoardBloc = DashBoardBloc();
     _dashBoardBloc.init();
+    Timer(Duration(seconds: 2), (){
+      setState(() {
+
+      });
+    });
   }
 
   @override
@@ -34,24 +41,44 @@ class _DashBoardViewState extends State<DashBoardView> {
         centerTitle: true,
         title: Text("DashBoard"),
       ),
-      body: Container(
+      body: _dashBoardBloc.loggedUser != null ? Container(
         child: Center(
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-        CircleAvatar(
-        backgroundImage: NetworkImage(_dashBoardBloc.loggedUser.photoUrl == null ? "https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png" : _dashBoardBloc.loggedUser.photoUrl ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: CircleAvatar(
+          backgroundImage: NetworkImage(_dashBoardBloc.loggedUser.photoUrl == null ? "https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png" : _dashBoardBloc.loggedUser.photoUrl ),
       ),
-        Text(_dashBoardBloc.loggedUser.displayName == null ? "": _dashBoardBloc.loggedUser.displayName),
-        Text(_dashBoardBloc.loggedUser.email),
-          RaisedButton(
-            onPressed: () {
-              _dashBoardBloc.signOut(context);
-            },
-            child: new Text("Sign Out"),
-            color: Colors.green,
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(_dashBoardBloc.loggedUser.displayName == null ? "": _dashBoardBloc.loggedUser.displayName),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(_dashBoardBloc.loggedUser.email),
+        ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("user token ${_dashBoardBloc.loggedUser.uid}",),
+                ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: RaisedButton(
+              onPressed: () {
+                _dashBoardBloc.signOut(context);
+              },
+              child: new Text("Sign Out"),
+              color: Colors.green,
+            ),
           ),]
           ),
+        ),
+      ) : Container(
+        child: Center(
+          child: CircularProgressIndicator(),
         ),
       ),
     );

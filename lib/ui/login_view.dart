@@ -114,6 +114,13 @@ class _LoginViewState extends State<LoginView> {
               child: new Text("Sign In with Google"),
               color: Colors.green,
             ),
+            RaisedButton(
+              onPressed: () {
+                _loginBloc.login(_loginBloc.instagramApi);
+              },
+              child: new Text("Sign In with Instagram"),
+              color: Colors.green,
+            ),
           ],
         ),
       ),

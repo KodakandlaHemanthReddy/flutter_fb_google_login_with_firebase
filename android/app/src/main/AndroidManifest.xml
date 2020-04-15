@@ -31,6 +31,14 @@
                 <data android:host="fluttergooglesigninapp.page.link" android:scheme="http"/>
             </intent-filter>
         </activity>
+        <activity android:name="clancey.simpleauth.simpleauthflutter.SimpleAuthCallbackActivity" >
+            <intent-filter android:label="simple_auth">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="com.googleusercontent.apps.992461286651-k3tsbcreniknqptanrugsetiimt0lkvo" />
+            </intent-filter>
+        </activity>
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
 

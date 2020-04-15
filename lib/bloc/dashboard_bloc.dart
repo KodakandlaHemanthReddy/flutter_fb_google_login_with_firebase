@@ -3,16 +3,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttergooglesigninapp/bloc/base_bloc.dart';
-import 'package:fluttergooglesigninapp/repository/base_repo.dart';
-import 'package:fluttergooglesigninapp/repository/base_repo_impl.dart';
+import 'package:fluttergooglesigninapp/repository/dashboard_repo.dart';
+import 'package:fluttergooglesigninapp/repository/dashboard_repo_impl.dart';
 
 class DashBoardBloc implements BaseBloc{
-  BaseRepository _baseRepository;
+  DashBoardRepository _dashBoardRepository;
 
   @override
   void init() {
     // TODO: implement init
-    _baseRepository = BaseRepositoryImpl();
+    _dashBoardRepository = DashBoardRepositoryImpl();
+    getUserData();
   }
 
   @override
@@ -22,10 +23,10 @@ class DashBoardBloc implements BaseBloc{
 
   FirebaseUser loggedUser;
 
-  getUserData(){
-//    _baseRepository.userData();
+  getUserData() async{
+   loggedUser = await _dashBoardRepository.userData();
   }
   signOut(BuildContext context){
-    _baseRepository.signOut(context);
+    _dashBoardRepository.signOut(context);
   }
 }
