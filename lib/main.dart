@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttergooglesigninapp/bloc/login_bloc.dart';
+import 'package:fluttergooglesigninapp/ui/dashboard_view.dart';
+import 'package:fluttergooglesigninapp/ui/login_view.dart';
 import 'package:fluttergooglesigninapp/ui/splash_screen.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:simple_auth_flutter/simple_auth_flutter.dart';
@@ -14,11 +17,13 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
+LoginBloc _loginBloc;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _loginBloc = LoginBloc();
+    _loginBloc.init();
     SimpleAuthFlutter.init(context);
   }
   @override
@@ -45,7 +50,16 @@ class _MyAppState extends State<MyApp> {
     title: TextStyle(fontSize: 14.0, fontStyle: FontStyle.italic),
     body1: TextStyle(fontSize: 12.0,))
       ),
-      home: SplashScreen(),
+      home: StreamBuilder(
+        stream: _loginBloc.loggedUser,
+          builder: (context, AsyncSnapshot<FirebaseUser> snapshot){
+          print("snapshot ${snapshot.data}");
+          if(snapshot.data != null){
+            return DashBoardView();
+          } else{
+            return LoginView();
+          }
+          }),
     );
   }
 }

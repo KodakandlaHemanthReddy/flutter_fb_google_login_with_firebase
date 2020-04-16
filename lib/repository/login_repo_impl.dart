@@ -42,7 +42,7 @@ class LoginRepositoryImpl implements LoginRepository{
   }
 
   @override
-  handleSignIn(BuildContext context) async
+  Future<FirebaseUser> handleSignIn(BuildContext context) async
   {
     print("entered login");
     GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
@@ -63,6 +63,7 @@ class LoginRepositoryImpl implements LoginRepository{
     }
     SharedPreference().save_Prefrences("loggedUser", user.email);
     print("login");
+    return user;
   }
   @override
   signUpWithEmail(String email, String password,BuildContext context) async {

@@ -11,7 +11,7 @@ abstract class LoginRepository implements BaseRepository{
   GoogleSignIn get googleSignIn;
   FirebaseUser get loggedInUser;
   void signInWithEmail(String email,String password,BuildContext context);
-  void handleSignIn(BuildContext context);
+  Future<FirebaseUser> handleSignIn(BuildContext context);
   void signUpWithEmail(String email,String password,BuildContext context);
   void sendSignInWithEmailLink(String email);
   routeHandler(BuildContext context);
