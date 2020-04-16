@@ -24,7 +24,9 @@ class LoginBloc implements BaseBloc{
     // TODO: implement dispose
   }
   final simpleAuth.InstagramApi instagramApi = new simpleAuth.InstagramApi(
-      "instagram", "3551676811515505", "4b1acdfae3ce8ebed9e1593de49edda3", "https://login-4583c.firebaseapp.com/__/auth/handle",scopes: "");
+      "instagram", "3551676811515505", "4b1acdfae3ce8ebed9e1593de49edda3", "https://login-4583c.firebaseapp.com/__/auth/handle",
+  scopes: []
+  );
   signInWithEmail(String email,String password,BuildContext context){
     _baseRepository.signInWithEmail(email,password,context);
   }
