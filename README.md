@@ -2,13 +2,21 @@ We can login in the application with facebook
 
 ## Getting Started
 
-Flutter Facebook Login Steps
+- Flutter Facebook Login Steps
 
-1.Creating Facebook Application & get APP name & App ID 2.Adding Facebook Package 3.Create a strings.xml file in your android folder 4.Configure your AndroidManifest.xml file
+1.Creating Facebook Application & get APP name & App ID
 
-Goto facebook developers site and login with credentials. Follow Steps MyApps-->create app-->enter display name--> dashboard --> facebook login setup --> quickstart --> android
+2.Adding Facebook Package
 
-Click Next for 1st two steps mentioned there
+3.Create a strings.xml file in your android folder
+
+4.Configure your AndroidManifest.xml file
+
+- Goto facebook developers site and login with credentials.
+
+-   Follow Steps MyApps-->create app-->enter display name--> dashboard --> facebook login setup --> quickstart --> android
+
+- Click Next for 1st two steps mentioned there
 
 In 3rd step
 
@@ -16,7 +24,7 @@ add your package name in 1st text field eg. com.example.myapp In second field ad
 
 Then save-->Usethis packagename--> Continue
 
-Here we need to generate the hash key Follow the steps from there to generate haskkey based on the machine you have. after generating hashkey paste below you see the text field and save--> continue
+Here we need to generate the hash key Follow the steps from there to generate haskkey based on the machine you have. After generating hashkey paste below you see the text field and save--> continue
 
 And go on next until the last step
 
